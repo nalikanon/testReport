@@ -17,6 +17,13 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Filter Form -->
     <div class="card mb-4 shadow-sm border-0">
         <div class="card-body">
@@ -103,6 +110,7 @@
                             <th>Request Date</th>
                             <th>Technician</th>
                             <th>Cost (Spare/Labor)</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,10 +144,24 @@
                                     Spare: ฿{{ number_format($log->spare_parts_cost, 2) }}<br>
                                     Labor: ฿{{ number_format($log->labor_cost, 2) }}
                                 </td>
+                                <td>
+                                    <form action="{{ route('reports.updateStatus', $log->repair_id) }}" method="POST" class="d-flex align-items-center" style="gap: 5px;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="status" class="form-select form-select-sm" style="width: 120px;">
+                                            <option value="In Progress" {{ $log->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                                            <option value="Completed" {{ $log->status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                                    </form>
+                                    @if($log->end_date)
+                                        <small class="text-muted mt-1 d-block">Ended: {{ \Carbon\Carbon::parse($log->end_date)->format('d M H:i') }}</small>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">No records found matching your filters.</td>
+                                <td colspan="9" class="text-center py-4 text-muted">No records found matching your filters.</td>
                             </tr>
                         @endforelse
                     </tbody>

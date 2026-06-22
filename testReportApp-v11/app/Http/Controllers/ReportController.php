@@ -34,4 +34,18 @@ class ReportController extends Controller
 
         return view('reports.index', compact('logs', 'statuses', 'maintenanceTypes'));
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:In Progress,Completed'
+        ]);
+
+        $log = MaintenanceLog::findOrFail($id);
+        $log->status = $request->status;
+        $log->end_date = now(); // Set end_date to current time
+        $log->save();
+
+        return redirect()->back()->with('success', 'อัปเดตสถานะเป็น ' . $request->status . ' สำเร็จ (เวลา End Date อัปเดตเป็นปัจจุบัน)');
+    }
 }

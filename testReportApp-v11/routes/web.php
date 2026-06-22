@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::patch('/reports/{id}/status', [ReportController::class, 'updateStatus'])->name('reports.updateStatus');
