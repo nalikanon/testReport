@@ -22,7 +22,7 @@
         <div class="card-body">
             <form action="{{ route('reports.index') }}" method="GET" class="row align-items-end">
                 <!-- Keyword Search -->
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="keyword" class="form-label">Search</label>
                     <input type="text" name="keyword" id="keyword" class="form-control" placeholder="Machine, Issue, Tech Name..." value="{{ request('keyword') }}">
                 </div>
